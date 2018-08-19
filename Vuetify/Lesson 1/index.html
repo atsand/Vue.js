@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Player Viewer</title>
+    <link rel="shortcut icon" href="">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/nv.d3.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <style>
+        #chart svg {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="simpleApp">
+        <v-app dark>
+            <v-content>
+                <v-container>
+                    <v-layout row>
+                        <div>
+                            <v-btn v-on:click="loadApi" color="primary">Load Data</v-btn>
+                            <v-select
+                                v-if="apiData"
+                                v-model="selectedCountry"
+                                :items="apiData.nations"
+                                label="Select Country"
+                                v-on:change="selectionChanged"
+                          ></v-select>
+                        </div>
+                    </v-layout>
+                    <v-content v-if="selectedCountry">
+                        <div>
+                            <v-dialog v-if="dialog == true" v-model="dialog" max-width="900px" persistent>
+                                <v-card>
+                                    <v-card-title>
+                                        <span class="headline">Details For {{selectedPlayer.name}}</span>
+                                    </v-card-title>
+                        
+                                    <v-card-text>
+                                        <div id="chart">
+                                            <svg></svg>
+                                        </div>
+                                        <!-- <v-container grid-list-md>
+                                            <v-layout wrap>
+                                                <v-flex xs12 sm6 md4>
+                                                    <v-text-field v-model="selectedPlayer.pas" label="Passing"></v-text-field>
+                                                </v-flex>
+                                                <v-flex xs12 sm6 md4>
+                                                    <v-text-field v-model="selectedPlayer.dri" label="Dribbling"></v-text-field>
+                                                </v-flex>
+                                                <v-flex xs12 sm6 md4>
+                                                    <v-text-field v-model="selectedPlayer.phy" label="Physicality"></v-text-field>
+                                                </v-flex>
+                                                <v-flex xs12 sm6 md4>
+                                                    <v-text-field v-model="selectedPlayer.pac" label="Pace"></v-text-field>
+                                                </v-flex>
+                                                <v-flex xs12 sm6 md4>
+                                                    <v-text-field v-model="selectedPlayer.def" label="Defense"></v-text-field>
+                                                </v-flex>
+                                                <v-flex xs12 sm6 md4>
+                                                    <v-text-field v-model="selectedPlayer.sho" label="Shooting"></v-text-field>
+                                                </v-flex>
+                                            </v-layout>
+                                        </v-container> -->
+                                    </v-card-text>
+                        
+                                    <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                        <v-btn color="blue darken-1" v-on:click="closeDetails">Close</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                            <v-data-table
+                                :headers="headers"
+                                :items="apiData.top_10s[selectedCountry]"
+                                hide-actions
+                                item-key="name"
+                            >
+                                <template slot="items" slot-scope="props">
+                                        <tr @click="selectPlayer(props.item)">
+                                            <td>
+                                                <v-flex class="text-xs-center" column>
+                                                    <img src="data/Marouane-Fellaini.jpg" style="width:200px;height:112px;">
+                                                    <div>{{props.item.name}}</div>
+                                                </v-flex>
+                                            </td>
+                                            <td >{{ props.item.age }}</td>
+                                            <td >{{ props.item.nationality }}</td>
+                                            <td >
+                                                <v-flex class="text-xs-center" column>
+                                                    <img src="data/usa-old-logo.jpg" style="width:160px;height:122px;">
+                                                    <div>{{props.item.club}}</div>
+                                                </v-flex></td>
+                                            <td >{{ props.item.overall }}</td>
+                                        </tr>
+                                </template>
+                            </v-data-table>
+                            <!--<v-data-table
+                                :headers="headers"
+                                :items="apiData.top_10s[selectedCountry]"
+                                hide-actions
+                                item-key="name"
+                            >
+                                <template slot="items" slot-scope="props">
+                                        <tr @click="props.expanded = !props.expanded">
+                                            <td>
+                                                <v-flex class="text-xs-center" column>
+                                                    <img src="data/Marouane-Fellaini.jpg" style="width:200px;height:112px;">
+                                                    <div>{{props.item.name}}</div>
+                                                </v-flex>
+                                            </td>
+                                            <td >{{ props.item.age }}</td>
+                                            <td >{{ props.item.nationality }}</td>
+                                            <td ><img src="data/usa-old-logo.jpg" style="width:160px;height:122px;"></td>
+                                            <td >{{ props.item.overall }}</td>
+                                        </tr>
+                                </template>
+                                <template slot="expand" slot-scope="props">
+                                    <v-card flat>
+                                        <v-card-text>Peek-a-boo!</v-card-text>
+                                    </v-card>
+                                </template>
+                            </v-data-table>-->
+                        </div>
+                        <!-- <div v-for="player in apiData.top_10s[selectedCountry]">
+                            Player: {{player.name}}
+                        </div> -->
+                    </v-content>
+                </v-container>
+            </v-content>
+            <pre>
+                {{ $data }}
+            </pre>
+        </v-app>
+       
+    </div>
+</body>
+
+<script src="js/framework/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="js/framework/d3.js"></script>
+<!-- <script src="js/framework/d3.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.6/nv.d3.js"></script>
+<!-- <script src="js/framework/nv.d3.js"></script> -->
+<script src="js/charts.js"></script>
+<script src="js/js.js"></script>
+</html>
