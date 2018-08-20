@@ -1,0 +1,26 @@
+﻿
+<section class="ISA-Outer">
+    <section class="ISA-Inner">
+        <div id="OrganizationManager">
+            <select id="ComponentTypeSelect" v-model="selectedComponentTypeID">
+                <option v-for="type in componentTypes" :value="type.ComponentTypeID">{{type.ComponentType}}</option>
+            </select>
+            <!--<select v-if="selectedComponentTypeID" id="ComponentSelect" >
+                <option v-for="component in components" :value="component.ComponentTypeID" >{{component.ComponentName}}</option>
+            </select>-->
+            <v-select id="ComponentSelect" v-if="selectedComponentTypeID" v-model="selectedComponent" :options="filteredComponents" label="ComponentName" ></v-select>
+
+            <p v-if="selectedComponentTypeID">Selected ComponentTypeID: {{selectedComponentTypeID}}</p>
+            <p v-if="selectedComponent">Selected ComponentID: {{selectedComponent.ComponentID}}
+            Selected Component ComponentTypeID:{{selectedComponent.ComponentTypeID}}</p>
+        </div>
+    </section>
+</section>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="/Desktopmodules/ISACenteralService/Scripts/js/vue.js"></script>
+<link rel="stylesheet" type="text/css" href="/Desktopmodules/ISACenteralService/Scripts/css/custom.css">
+<script src="https://unpkg.com/vue-select@latest"></script>
+
+<script src="/DesktopModules/ISA.OrganizationManager/View/js/OrganizationManager.js"></script>
+<link rel="stylesheet" type="text/css" href="/DesktopModules/ISA.OrganizationManager/View/css/OrganizationManager.css">
